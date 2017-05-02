@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
     public float ForcaDoPulo = 10f;
     public AudioClip somPulo;
     public AudioClip somMorte;
+    private Vector3 posicaoInicial;
+    private Quaternion rotacaoInicial;
 
     private Animator anim;
     private Rigidbody rb;
@@ -14,13 +17,27 @@ public class PlayerController : MonoBehaviour {
 
     private bool pulando = false;
 
-	void Start () {
+
+
+    void Start () {
+        posicaoInicial = transform.localPosition;
+        rotacaoInicial = transform.localRotation;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
 	}
-	
-	void Update () {
+
+
+    public void recomecar() {
+        rb.useGravity = false;
+        rb.velocity = Vector3.zero;
+        rb.detectCollisions = true;
+        transform.localPosition = posicaoInicial;
+        transform.localRotation = rotacaoInicial;
+    }
+
+
+    void Update () {
         if (GameController.instancia.estado == Estado.Jogando) {
             if (Input.GetMouseButtonDown(0)) {
                 anim.Play("pulando");
